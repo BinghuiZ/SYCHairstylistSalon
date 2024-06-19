@@ -7,7 +7,8 @@ import interactionPlugin, {
   DropArg,
 } from '@fullcalendar/interaction'
 import timeGridPlugin from '@fullcalendar/timegrid'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { start } from 'repl'
 
 interface Event {
   title: string
@@ -35,6 +36,47 @@ export default function Home() {
     id: 0,
   })
 
+  useEffect(() => {
+    let draggableEl = document.getElementById('draggable-el')
+    if (draggableEl) {
+      new Draggable(draggableEl, {
+        itemSelector: '.fc-event',
+        eventData: function (eventEl) {
+          let title = eventEl.getAttribute('title')
+          let id = eventEl.getAttribute('data')
+          let start = eventEl.getAttribute('start')
+          return { title, id, start }
+        },
+      })
+    }
+  }, [])
+
+  function handleDateClick(arg: { date: Date; allDay: boolean }) {
+    setNewEvent({
+      ...newEvent,
+      start: arg.date,
+      allDay: arg.allDay,
+      id: new Date().getTime(),
+    })
+    setShowModal(true)
+  }
+
+  function addEvent(data: DropArg) {
+    const event = {
+      ...newEvent,
+      start: data.date.toISOString(),
+      title: data.draggedEl.innerText,
+      allDay: data.allDay,
+      id: new Date().getTime(),
+    }
+    setAllEvents([...allEvents, event])
+  }
+
+  function handleDeleteModal(data: { event: { id: string } }) {
+    setShowDeleteModal(true)
+    setIdToDelete(Number(data.event.id))
+  }
+
   return (
     <>
       <nav>
@@ -48,7 +90,7 @@ export default function Home() {
               headerToolbar={{
                 left: 'prev,next today',
                 center: 'title',
-                right: 'resourceTimelineWook, dayGridMonth, timeGridWeek',
+                right: 'resourceTimelineWook, dayGridMonth,timeGridWeek',
               }}
               events={allEvents}
               nowIndicator={true}
@@ -56,9 +98,9 @@ export default function Home() {
               droppable={true}
               selectable={true}
               selectMirror={true}
-              // dateClick={{}}
-              // drop={{}}
-              // eventClick={{}}
+              dateClick={handleDateClick}
+              drop={(data) => addEvent(data)}
+              eventClick={(data) => handleDeleteModal(data)}
             />
           </div>
           <div
