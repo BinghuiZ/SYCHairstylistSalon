@@ -10,6 +10,11 @@ export async function GET(
 
   const customer = await prisma.customer.findUnique({
     where: { id: Number(params.id) },
+    include: {
+      orders: {
+        orderBy: { createdAt: 'desc' },
+      },
+    },
   })
 
   if (!customer) return new Response('Customer not found', { status: 404 })
