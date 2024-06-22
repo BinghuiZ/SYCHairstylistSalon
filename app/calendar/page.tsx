@@ -11,6 +11,7 @@ import { Fragment, useEffect, useState } from 'react'
 import { start } from 'repl'
 import { Dialog, Transition } from '@headlessui/react'
 import { CheckIcon, ExclamationTriangleIcon } from '@heroicons/react/20/solid'
+import { Calendar } from '@fullcalendar/core/index.js'
 
 interface Event {
   title: string
