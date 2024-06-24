@@ -2,29 +2,28 @@ import prisma from '@/prisma/client'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function GET(request: NextRequest) {
-  const orders = await prisma.order.findMany({
-    orderBy: { createdAt: 'desc' },
+  const clients = await prisma.client.findMany({
+    orderBy: { name: 'asc' },
   })
 
-  return NextResponse.json(orders)
+  return NextResponse.json(clients)
 }
 
 export async function POST(request: NextRequest) {
-  console.log('POST /api/orders');
+  console.log('POST /api/clients');
 
   try {
     const body = await request.json();
-    const { price, description, customerId } = body;
+    const { name, phone } = body;
 
-    const order = await prisma.order.create({
+    const client = await prisma.client.create({
       data: {
-        price,
-        description,
-        customerId: Number(customerId)
+        name,
+        phone,
       },
     });
 
-    return NextResponse.json(order);
+    return NextResponse.json(client);
   } catch (error) {
     console.error('Error parsing request body:', error);
     return new Response('Invalid request body', { status: 400 });
