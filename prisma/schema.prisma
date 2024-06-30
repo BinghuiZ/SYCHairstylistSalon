@@ -23,15 +23,14 @@ model Client {
 }
 
 model Booking {
-  id          Int      @id @default(autoincrement())
-  title       String
-  date        DateTime
-  startTime   DateTime
-  endTime     DateTime
-  amount      Float    @default(0)
-  description String?
-  clientId    Int
-  client      Client   @relation(fields: [clientId], references: [id])
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id            Int      @id @default(autoincrement())
+  title         String
+  startDateTime DateTime
+  endDateTime   DateTime
+  amount        Float    @default(0)
+  description   String?
+  clientId      Int
+  client        Client   @relation(fields: [clientId], references: [id])
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
