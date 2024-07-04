@@ -7,10 +7,14 @@ import { clientSchema } from '@/app/validationSchema'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import ErrorMessage from '@/app/components/ErrorMessage'
+import axios from 'axios'
+import { useRouter } from 'next/navigation'
+
 
 type ClientFormData = z.infer<typeof clientSchema>
 
 const ClientsPage = () => {
+  const router = useRouter()
   const [modalOpen, setModalOpen] = useState(false)
 
   const {
@@ -24,11 +28,17 @@ const ClientsPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log('submitting')
-    setIsSubmitting(true)
-    // send data to server
-    console.log(data)
-    setIsSubmitting(false)
+    try {
+      setIsSubmitting(true)
+      axios.post('/api/clients', data)
+      router.push('/clients')
+      router.refresh()
+      setIsSubmitting(false)
+      setModalOpen(false)
+    } catch (error) {
+      setIsSubmitting(false)
+      setError('An error occurred. Please try again.')
+    }
   })
 
   return (
