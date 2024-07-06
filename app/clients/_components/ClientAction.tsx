@@ -41,7 +41,7 @@ const ClientAction = () => {
   })
 
   return (
-    <>
+    <Flex justify='between'>
       <Dialog.Root open={modalOpen} onOpenChange={setModalOpen}>
         <Dialog.Trigger>
           <Button>Add</Button>
@@ -90,7 +90,7 @@ const ClientAction = () => {
           </Flex>
         </Dialog.Content>
       </Dialog.Root>
-    </>
+    </Flex>
   )
 }
 
