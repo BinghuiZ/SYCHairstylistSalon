@@ -1,8 +1,8 @@
 'use client'
 
-import { TabNav } from '@radix-ui/themes'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import classnames from 'classnames'
 
 const NavBar = () => {
   const currentPath = usePathname()
@@ -14,13 +14,24 @@ const NavBar = () => {
   ]
 
   return (
-    <TabNav.Root>
-      {links.map(({ href, text }) => (
-        <TabNav.Link key={href} active={currentPath === href}>
-          <Link href={href}>{text}</Link>
-        </TabNav.Link>
-      ))}
-    </TabNav.Root>
+    <nav className='border-b px-4 py-2'>
+      <ul>
+        {links.map(({ href, text }) => (
+          <li key={href} className='inline-block mr-4'>
+            <Link
+              href={href}
+              className={classnames({
+                'nav-link': true,
+                'block py-2 px-3 text-blue-600':
+                  currentPath === href,
+              })}
+            >
+              {text}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </nav>
   )
 }
 
