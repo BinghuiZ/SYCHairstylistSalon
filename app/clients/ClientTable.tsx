@@ -10,23 +10,36 @@ const ClientTable = ({ clients }: Props) => {
     <Table.Root variant='surface'>
       <Table.Header>
         <Table.Row>
-          <Table.ColumnHeaderCell>id</Table.ColumnHeaderCell>
-          <Table.ColumnHeaderCell>Name</Table.ColumnHeaderCell>
-          <Table.ColumnHeaderCell>Phone</Table.ColumnHeaderCell>
+          {headerColumns.map((column) => (
+            <Table.ColumnHeaderCell key={column.value}>
+              {column.label}
+            </Table.ColumnHeaderCell>
+          ))}
         </Table.Row>
       </Table.Header>
 
       <Table.Body>
         {clients.map((client) => (
           <Table.Row key={client.id}>
-            <Table.ColumnHeaderCell>{client.id}</Table.ColumnHeaderCell>
-            <Table.Cell>{client.name}</Table.Cell>
+            <Table.ColumnHeaderCell>{client.name}</Table.ColumnHeaderCell>
             <Table.Cell>{client.phone}</Table.Cell>
+            <Table.Cell>{client.createdAt.toDateString()}</Table.Cell>
           </Table.Row>
         ))}
       </Table.Body>
     </Table.Root>
   )
 }
+
+const headerColumns: {
+  label: string
+  value: keyof Client
+}[] = [
+  { label: 'Name', value: 'name' },
+  { label: 'Phone', value: 'phone' },
+  { label: 'CreatedAt', value: 'createdAt' },
+]
+
+export const columnNames = headerColumns.map((column) => column.value)
 
 export default ClientTable
