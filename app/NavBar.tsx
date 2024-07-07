@@ -22,7 +22,8 @@ const NavBar = () => {
               href={href}
               className={classnames({
                 'nav-link': true,
-                'block py-2 px-3 text-blue-600':
+                'block py-2 px-3': true,
+                'text-blue-600':
                   currentPath === href,
               })}
             >
