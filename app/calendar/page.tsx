@@ -9,7 +9,7 @@ import interactionPlugin, {
 import timeGridPlugin from '@fullcalendar/timegrid'
 import { Fragment, useEffect, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import { CheckIcon, ExclamationTriangleIcon } from '@heroicons/react/20/solid'
+import { ExclamationTriangleIcon, CheckCircledIcon } from '@radix-ui/react-icons'
 
 interface Event {
   title: string
@@ -229,7 +229,7 @@ const CalendarPage = () => {
                 <Dialog.Panel className='relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6'>
                   <div>
                     <div className='mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100'>
-                      <CheckIcon
+                      <CheckCircledIcon
                         className='h-6 w-6 text-green-600'
                         aria-hidden='true'
                       />
