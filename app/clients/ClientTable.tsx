@@ -1,18 +1,35 @@
 import { Client } from '@prisma/client'
+import { ArrowUpIcon } from '@radix-ui/react-icons'
 import { Table } from '@radix-ui/themes'
+import NextLink from 'next/link'
+
+export interface ClientQuery {
+  orderBy: keyof Client;
+  page: string;
+}
 
 interface Props {
+  searchParams: ClientQuery
   clients: Client[]
 }
 
-const ClientTable = ({ clients }: Props) => {
+const ClientTable = ({ searchParams, clients }: Props) => {
   return (
     <Table.Root variant='surface'>
       <Table.Header>
         <Table.Row>
           {headerColumns.map((column) => (
             <Table.ColumnHeaderCell key={column.value}>
-              {column.label}
+              <NextLink
+                href={{
+                  query: { ...searchParams, orderBy: column.value },
+                }}
+              >
+                {column.label}
+              </NextLink>
+              {column.value === searchParams.orderBy && (
+                <ArrowUpIcon className='inline' />
+              )}
             </Table.ColumnHeaderCell>
           ))}
         </Table.Row>
