@@ -39,4 +39,9 @@ const ClientsPage = async ({ searchParams }: Props) => {
   )
 }
 
+/**
+ * Represents a constant variable for dynamic behavior.
+ */
+export const dynamic = 'force-dynamic'
+
 export default ClientsPage
