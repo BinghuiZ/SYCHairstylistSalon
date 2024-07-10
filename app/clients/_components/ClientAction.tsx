@@ -35,6 +35,7 @@ const ClientAction = () => {
   const {
     control,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<ClientFormData>({
     resolver: zodResolver(clientSchema),
@@ -45,11 +46,13 @@ const ClientAction = () => {
   const onSubmit = handleSubmit(async (data) => {
     try {
       setIsSubmitting(true)
-      axios.post('/api/clients', data)
+      await axios.post('/api/clients', data)
       router.push('/clients')
       router.refresh()
       setIsSubmitting(false)
       setModalOpen(false)
+      setError('')
+      reset()
     } catch (error) {
       setIsSubmitting(false)
       setError('An error occurred. Please try again.')
