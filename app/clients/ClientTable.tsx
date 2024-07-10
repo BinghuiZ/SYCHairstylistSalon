@@ -6,6 +6,7 @@ import NextLink from 'next/link'
 export interface ClientQuery {
   orderBy: keyof Client;
   page: string;
+  q: string;
 }
 
 interface Props {

@@ -12,13 +12,20 @@ const ClientsPage = async ({ searchParams }: Props) => {
   const orderBy = columnNames.includes(searchParams.orderBy)
     ? { [searchParams.orderBy]: 'asc' }
     : undefined
-  // const where = { status }
+  const where = searchParams.q
+    ? {
+        OR: [
+          { name: { contains: searchParams.q } },
+          { phone: { contains: searchParams.q } },
+        ],
+      }
+    : {}
 
   const page = parseInt(searchParams.page) || 1
   const pageSize = 10
 
   const clients = await prisma.client.findMany({
-    // where,
+    where,
     orderBy,
     skip: (page - 1) * pageSize,
     take: pageSize,
