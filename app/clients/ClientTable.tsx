@@ -4,9 +4,9 @@ import { Table } from '@radix-ui/themes'
 import NextLink from 'next/link'
 
 export interface ClientQuery {
-  orderBy: keyof Client;
-  page: string;
-  q: string;
+  orderBy: keyof Client
+  page: string
+  q: string
 }
 
 interface Props {
@@ -18,9 +18,9 @@ const ClientTable = ({ searchParams, clients }: Props) => {
   return (
     <Table.Root variant='surface'>
       <Table.Header>
-        <Table.Row>
+        <Table.Row align='center'>
           {headerColumns.map((column) => (
-            <Table.ColumnHeaderCell key={column.value}>
+            <Table.ColumnHeaderCell key={column.value} justify='center'>
               <NextLink
                 href={{
                   query: { ...searchParams, orderBy: column.value },
@@ -38,10 +38,14 @@ const ClientTable = ({ searchParams, clients }: Props) => {
 
       <Table.Body>
         {clients.map((client) => (
-          <Table.Row key={client.id}>
-            <Table.ColumnHeaderCell>{client.name}</Table.ColumnHeaderCell>
-            <Table.Cell>{client.phone}</Table.Cell>
-            <Table.Cell>{client.createdAt.toDateString()}</Table.Cell>
+          <Table.Row key={client.id} align='center'>
+            <Table.ColumnHeaderCell justify='center'>
+              {client.name}
+            </Table.ColumnHeaderCell>
+            <Table.Cell justify='center'>{client.phone}</Table.Cell>
+            <Table.Cell justify='center'>
+              {client.createdAt.toDateString()}
+            </Table.Cell>
           </Table.Row>
         ))}
       </Table.Body>
