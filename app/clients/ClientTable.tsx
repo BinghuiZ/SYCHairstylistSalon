@@ -1,6 +1,6 @@
 import { Client } from '@prisma/client'
 import { ArrowUpIcon } from '@radix-ui/react-icons'
-import { Table } from '@radix-ui/themes'
+import { Button, Table } from '@radix-ui/themes'
 import NextLink from 'next/link'
 
 export interface ClientQuery {
@@ -28,9 +28,10 @@ const ClientTable = ({ searchParams, clients }: Props) => {
               >
                 {column.label}
               </NextLink>
-              {column.value === searchParams.orderBy && (
-                <ArrowUpIcon className='inline' />
-              )}
+              {column.value === searchParams.orderBy &&
+                column.value !== undefined && (
+                  <ArrowUpIcon className='inline' />
+                )}
             </Table.ColumnHeaderCell>
           ))}
         </Table.Row>
@@ -46,6 +47,14 @@ const ClientTable = ({ searchParams, clients }: Props) => {
             <Table.Cell justify='center'>
               {client.createdAt.toDateString()}
             </Table.Cell>
+            <Table.Cell justify='center'>
+              <div className='flex justify-center space-x-2 content-center'>
+                <NextLink href={`/clients/${client.id}`}>
+                  <Button>Details</Button>
+                </NextLink>
+                <Button color='red'>Delete</Button>
+              </div>
+            </Table.Cell>
           </Table.Row>
         ))}
       </Table.Body>
@@ -55,13 +64,16 @@ const ClientTable = ({ searchParams, clients }: Props) => {
 
 const headerColumns: {
   label: string
-  value: keyof Client
+  value?: keyof Client
 }[] = [
   { label: 'Name', value: 'name' },
   { label: 'Phone', value: 'phone' },
   { label: 'CreatedAt', value: 'createdAt' },
+  { label: 'Actions' },
 ]
 
-export const columnNames = headerColumns.map((column) => column.value)
+export const columnNames = headerColumns
+  .filter((column) => column.value !== undefined)
+  .map((column) => column.value)
 
 export default ClientTable
