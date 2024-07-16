@@ -1,5 +1,7 @@
 import prisma from '@/prisma/client'
+import { Container } from '@radix-ui/themes'
 import { notFound } from 'next/navigation'
+import ClientForm from '../_components/clientForm'
 
 interface Props {
   params: { id: string }
@@ -17,12 +19,9 @@ const ClientDetailPage = async ({ params }: Props) => {
   if (!client) notFound()
 
   return (
-    <div>
-      <h1>Client Detail Page</h1>
-      <p>{client.name}</p>
-      <p>{client.phone}</p>
-      <p>{client.createdAt.toDateString()}</p>
-    </div>
+    <Container>
+      <ClientForm client={client} />
+    </Container>
   )
 }
 
