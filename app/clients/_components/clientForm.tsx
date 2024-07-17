@@ -4,7 +4,15 @@ import ErrorMessage from '@/app/components/ErrorMessage'
 import { clientSchema } from '@/app/validationSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Client } from '@prisma/client'
-import { Button, Card, Flex, TextField } from '@radix-ui/themes'
+import {
+  Button,
+  Card,
+  Container,
+  Flex,
+  TextField,
+  Text,
+  Box,
+} from '@radix-ui/themes'
 import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -30,39 +38,48 @@ const ClientForm = ({ client }: { client?: Client }) => {
   })
 
   return (
-    <Card >
-      <form className='space-y-3' onSubmit={onSubmit}>
-        <Controller
-          name='name'
-          control={control}
-          render={({ field }) => (
-            <TextField.Root
-              placeholder='Name'
-              defaultValue={client?.name}
-              {...field}
+    <Container asChild={true}>
+      <Card>
+        <form className='space-y-3' onSubmit={onSubmit}>
+          <Box>
+            <Text>Name</Text>
+            <Controller
+              name='name'
+              control={control}
+              render={({ field }) => (
+                <TextField.Root
+                  placeholder='Name'
+                  defaultValue={client?.name}
+                  {...register('name')}
+                />
+              )}
             />
-          )}
-        />
-        <ErrorMessage>{errors.name?.message}</ErrorMessage>
-        <Controller
-          name='phone'
-          control={control}
-          render={({ field }) => (
-            <TextField.Root
-              placeholder='Phone'
+            <ErrorMessage>{errors.name?.message}</ErrorMessage>
+          </Box>
+          <Box>
+            <Text>Phone</Text>
+            <Controller
+              name='phone'
+              control={control}
               defaultValue={client?.phone}
-              {...field}
+              render={({ field }) => (
+                <TextField.Root
+                  placeholder='Phone'
+                  defaultValue={client?.phone}
+                  {...register('phone')}
+                />
+              )}
             />
-          )}
-        />
-        <ErrorMessage>{errors.phone?.message}</ErrorMessage>
-        <Flex gap='3' mt='4' justify='end'>
-          <Button type='submit' disabled={isSubmitting}>
-            Update
-          </Button>
-        </Flex>
-      </form>
-    </Card>
+            <ErrorMessage>{errors.phone?.message}</ErrorMessage>
+          </Box>
+          <Flex gap='3' mt='4' justify='end'>
+            <Button type='submit' disabled={isSubmitting}>
+              Update
+            </Button>
+          </Flex>
+        </form>
+      </Card>
+    </Container>
   )
 }
 
