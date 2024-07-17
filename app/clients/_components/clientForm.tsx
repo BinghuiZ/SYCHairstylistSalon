@@ -12,7 +12,10 @@ import {
   TextField,
   Text,
   Box,
+  Callout,
+  Heading,
 } from '@radix-ui/themes'
+import axios from 'axios'
 import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -20,6 +23,7 @@ import { z } from 'zod'
 type IssueFormData = z.infer<typeof clientSchema>
 
 const ClientForm = ({ client }: { client?: Client }) => {
+  const [error, setError] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const {
@@ -32,14 +36,27 @@ const ClientForm = ({ client }: { client?: Client }) => {
   })
 
   const onSubmit = handleSubmit(async (data) => {
-    setIsSubmitting(true)
-    console.log(data)
-    setIsSubmitting(false)
+    try {
+      setIsSubmitting(true)
+
+      await axios.put(`/api/clients/${client?.id}`, data)
+
+      setIsSubmitting(false)
+    } catch (error) {
+      setIsSubmitting(false)
+      setError('An error occurred. Please try again.')
+    }
   })
 
   return (
     <Container asChild={true}>
       <Card>
+        <Heading>Profile</Heading>
+        {error && (
+          <Callout.Root color='red' className='mb-5'>
+            <Callout.Text>{error}</Callout.Text>
+          </Callout.Root>
+        )}
         <form className='space-y-3' onSubmit={onSubmit}>
           <Box>
             <Text>Name</Text>
