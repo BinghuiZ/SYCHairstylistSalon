@@ -1,5 +1,5 @@
 import prisma from '@/prisma/client'
-import { Container } from '@radix-ui/themes'
+import { Card, Container, Flex, Heading, Table } from '@radix-ui/themes'
 import { notFound } from 'next/navigation'
 import ClientForm from '../_components/clientForm'
 
@@ -20,7 +20,14 @@ const ClientDetailPage = async ({ params }: Props) => {
 
   return (
     <Container>
-      <ClientForm client={client} />
+      <Flex justify='between' gap='3' direction='column'>
+        <ClientForm client={client} />
+        <Container asChild={true}>
+          <Card>
+            <Heading>Booking History</Heading>
+          </Card>
+        </Container>
+      </Flex>
     </Container>
   )
 }
