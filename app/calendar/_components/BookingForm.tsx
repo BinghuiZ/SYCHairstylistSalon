@@ -1,6 +1,7 @@
 import {
   Dialog,
   DialogPanel,
+  DialogTitle,
   Transition,
   TransitionChild,
 } from '@headlessui/react'
@@ -66,12 +67,12 @@ const BookingForm = ({ showModal, setShowModal, handleCloseModal }: props) => {
                     />
                   </div>
                   <div className='mt-3 text-center sm:mt-5'>
-                    <Dialog.Title
+                    <DialogTitle
                       as='h3'
                       className='text-base font-semibold leading-6 text-gray-900'
                     >
                       Add Event
-                    </Dialog.Title>
+                    </DialogTitle>
                     <form action='submit' onSubmit={handleSubmit}>
                       <div className='mt-2'>
                         <input
