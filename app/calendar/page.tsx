@@ -19,20 +19,6 @@ interface Event {
 }
 
 const CalendarPage = () => {
-  const [events, setEvents] = useState([
-    {
-      title: 'event 1',
-      start: '2024-06-30',
-      startTime: '09:00',
-      endTime: '10:00',
-      allDay: false,
-      id: 1,
-    },
-    { title: 'event 2', start: '2021-09-02', allDay: true, id: 2 },
-    { title: 'event 3', start: '2021-09-03', allDay: true, id: 3 },
-    { title: 'event 4', start: '2021-09-04', allDay: true, id: 4 },
-    { title: 'event 5', start: '2021-09-05', allDay: true, id: 5 },
-  ])
   const [allEvents, setAllEvents] = useState<Event[]>([])
   const [showModal, setShowModal] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
@@ -59,11 +45,10 @@ const CalendarPage = () => {
     }
   }, [])
 
-  function handleDateClick(arg: { date: Date; allDay: boolean }) {
+  function handleDateClick(arg: { date: Date; dateStr: string; }) {
     setNewEvent({
       ...newEvent,
       start: arg.date,
-      allDay: arg.allDay,
       id: new Date().getTime(),
     })
     setShowModal(true)
