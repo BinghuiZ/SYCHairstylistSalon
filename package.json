@@ -16,6 +16,7 @@
     "@fullcalendar/timegrid": "^6.1.14",
     "@headlessui/react": "^2.0.4",
     "@hookform/resolvers": "^3.6.0",
+    "@nextui-org/date-picker": "^2.1.6",
     "@prisma/client": "^5.16.0",
     "@radix-ui/react-icons": "^1.3.0",
     "@radix-ui/themes": "^3.1.1",
