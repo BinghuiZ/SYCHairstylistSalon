@@ -114,10 +114,7 @@ const BookingDetail = ({ showModal, setShowModal }: props) => {
             name='clientId'
             control={control}
             render={({ field }) => (
-              <TextField.Root
-                type='text'
-                {...register('clientId')}
-              />
+              <TextField.Root type='text' {...register('clientId')} />
             )}
           />
           <ErrorMessage>{errors.clientId?.message}</ErrorMessage>
@@ -141,7 +138,9 @@ const BookingDetail = ({ showModal, setShowModal }: props) => {
       </Box>
       <Flex gap='3' mt='4' justify='end'>
         <Button type='submit'>Add</Button>
-        <Button color='crimson'>Cancel</Button>
+        <Dialog.Close>
+          <Button color='crimson'>Cancel</Button>
+        </Dialog.Close>
       </Flex>
     </form>
   )
