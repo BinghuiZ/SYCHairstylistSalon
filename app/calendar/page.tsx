@@ -9,9 +9,7 @@ import interactionPlugin, {
 import timeGridPlugin from '@fullcalendar/timegrid'
 import { Fragment, useEffect, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import {
-  ExclamationTriangleIcon,
-} from '@radix-ui/react-icons'
+import { ExclamationTriangleIcon } from '@radix-ui/react-icons'
 import BookingForm from './_components/BookingForm'
 
 export interface Event {
@@ -171,15 +169,9 @@ const CalendarPage = () => {
     )
   }
 
-  const addModal = () => {
-    return (
-      <BookingForm
-        showModal={showModal}
-        handleCloseModal={handleCloseModal}
-        setShowModal={setShowModal}
-      />
-    )
-  }
+  const addModal = (
+    <BookingForm showModal={showModal} setShowModal={setShowModal} />
+  )
 
   return (
     <>
@@ -209,7 +201,7 @@ const CalendarPage = () => {
           </div>
         </div>
 
-        {addModal()}
+        {addModal}
         {deleteModal()}
       </main>
     </>

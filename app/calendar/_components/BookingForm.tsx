@@ -14,27 +14,32 @@ import {
 } from '@radix-ui/themes'
 import { MouseEventHandler } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { z } from 'zod'
+import { set, z } from 'zod'
 
 type BookingFormData = z.infer<typeof bookingSchema>
 
 interface props {
   showModal: boolean
   setShowModal: (value: boolean) => void
-  handleCloseModal: MouseEventHandler<HTMLButtonElement>
 }
 
-const BookingForm = ({ showModal, setShowModal, handleCloseModal }: props) => {
+const BookingForm = ({ showModal, setShowModal }: props) => {
   const {
     register,
     control,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<BookingFormData>({
     resolver: zodResolver(bookingSchema),
   })
 
   const onSubmit = handleSubmit(async (data) => {})
+
+  const onOpenChange = (value: boolean) => { 
+    setShowModal(value)
+    reset()
+  }
 
   const bookForm = (
     <form onSubmit={onSubmit}>
@@ -141,7 +146,7 @@ const BookingForm = ({ showModal, setShowModal, handleCloseModal }: props) => {
   )
 
   return (
-    <Dialog.Root open={showModal} onOpenChange={setShowModal}>
+    <Dialog.Root open={showModal} onOpenChange={onOpenChange}>
       <Dialog.Content style={{ maxWidth: '640px' }}>
         <Dialog.Title>Add New Booking</Dialog.Title>
         <Dialog.Description size='2' mb='4'>
