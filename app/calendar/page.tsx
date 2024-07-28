@@ -10,7 +10,7 @@ import timeGridPlugin from '@fullcalendar/timegrid'
 import { Fragment, useEffect, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { ExclamationTriangleIcon } from '@radix-ui/react-icons'
-import BookingForm from './_components/BookingForm'
+import BookingDetail from './_components/BookingDetail'
 
 export interface Event {
   title: string
@@ -170,7 +170,7 @@ const CalendarPage = () => {
   }
 
   const addModal = (
-    <BookingForm showModal={showModal} setShowModal={setShowModal} />
+    <BookingDetail showModal={showModal} setShowModal={setShowModal} />
   )
 
   return (

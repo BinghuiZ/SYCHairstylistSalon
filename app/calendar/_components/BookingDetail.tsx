@@ -22,7 +22,7 @@ interface props {
   setShowModal: (value: boolean) => void
 }
 
-const BookingForm = ({ showModal, setShowModal }: props) => {
+const BookingDetail = ({ showModal, setShowModal }: props) => {
   const {
     register,
     control,
@@ -35,7 +35,7 @@ const BookingForm = ({ showModal, setShowModal }: props) => {
 
   const onSubmit = handleSubmit(async (data) => {})
 
-  const onOpenChange = (value: boolean) => { 
+  const onOpenChange = (value: boolean) => {
     setShowModal(value)
     reset()
   }
@@ -90,22 +90,39 @@ const BookingForm = ({ showModal, setShowModal }: props) => {
           <ErrorMessage>{errors.endDateTime?.message}</ErrorMessage>
         </Box>
       </Flex>
-      <Box>
-        <Text>Amount</Text>
-        <Controller
-          name='amount'
-          control={control}
-          defaultValue={0}
-          render={({ field }) => (
-            <TextField.Root
-              placeholder='Amount'
-              defaultValue={0}
-              {...register('amount')}
-            />
-          )}
-        />
-        <ErrorMessage>{errors.amount?.message}</ErrorMessage>
-      </Box>
+      <Flex gap='2'>
+        <Box>
+          <Text>Amount</Text>
+          <Controller
+            name='amount'
+            control={control}
+            defaultValue={0}
+            render={({ field }) => (
+              <TextField.Root
+                placeholder='Amount'
+                type='number'
+                defaultValue={0}
+                {...register('amount')}
+              />
+            )}
+          />
+          <ErrorMessage>{errors.amount?.message}</ErrorMessage>
+        </Box>
+        <Box>
+          <Text>Client</Text>
+          <Controller
+            name='clientId'
+            control={control}
+            render={({ field }) => (
+              <TextField.Root
+                type='text'
+                {...register('clientId')}
+              />
+            )}
+          />
+          <ErrorMessage>{errors.clientId?.message}</ErrorMessage>
+        </Box>
+      </Flex>
       <Box>
         <Text>Description</Text>
         <Controller
@@ -122,24 +139,9 @@ const BookingForm = ({ showModal, setShowModal }: props) => {
         />
         <ErrorMessage>{errors.description?.message}</ErrorMessage>
       </Box>
-      <Box>
-        <Text>Client</Text>
-        <Controller
-          name='clientId'
-          control={control}
-          defaultValue={0}
-          render={({ field }) => (
-            <TextField.Root
-              placeholder='Client ID'
-              defaultValue={0}
-              {...register('clientId')}
-            />
-          )}
-        />
-        <ErrorMessage>{errors.clientId?.message}</ErrorMessage>
-      </Box>
       <Flex gap='3' mt='4' justify='end'>
         <Button type='submit'>Add</Button>
+        <Button color='crimson'>Cancel</Button>
       </Flex>
     </form>
   )
@@ -159,4 +161,4 @@ const BookingForm = ({ showModal, setShowModal }: props) => {
   )
 }
 
-export default BookingForm
+export default BookingDetail
