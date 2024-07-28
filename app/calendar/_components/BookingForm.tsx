@@ -12,9 +12,8 @@ import {
   TextArea,
   TextField,
 } from '@radix-ui/themes'
-import { MouseEventHandler } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { set, z } from 'zod'
+import { z } from 'zod'
 
 type BookingFormData = z.infer<typeof bookingSchema>
 
