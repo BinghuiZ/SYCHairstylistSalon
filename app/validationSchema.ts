@@ -10,9 +10,9 @@ export const clientSchema = z.object({
 
 export const bookingSchema = z.object({
   title: z.string().min(1, 'Title is required').max(255),
-  startDateTime: z.date(),
-  endDateTime: z.date(),
-  amount: z.number().default(0),
+  startDateTime: z.string(),
+  endDateTime: z.string(),
+  amount: z.string(),
   description: z
     .string()
     .min(1, 'Description is required')
