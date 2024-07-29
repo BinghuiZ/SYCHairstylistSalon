@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from 'next/server'
 // GET Method: Retrieve all bookings
 export async function GET(request: NextRequest) {
   const bookings = await prisma.booking.findMany({
-    orderBy: { date: 'desc' },
+    orderBy: { startDateTime: 'desc' },
   })
 
   return NextResponse.json(bookings)
@@ -16,16 +16,15 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json()
-    const { clientId, title, date, startTime, endTime, amount, description } =
+    const { clientId, title, startDateTime, endDateTime, amount, description } =
       body
 
     const booking = await prisma.booking.create({
       data: {
         clientId,
         title,
-        date,
-        startTime,
-        endTime,
+        startDateTime,
+        endDateTime,
         amount,
         description,
       },
