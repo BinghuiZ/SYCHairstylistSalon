@@ -12,8 +12,11 @@ import {
   TextArea,
   TextField,
 } from '@radix-ui/themes'
+import axios from 'axios'
+import { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { Client } from '@prisma/client'
 
 type BookingFormData = z.infer<typeof bookingSchema>
 
@@ -32,6 +35,7 @@ const BookingDetail = ({ showModal, setShowModal }: props) => {
   } = useForm<BookingFormData>({
     resolver: zodResolver(bookingSchema),
   })
+  const [clientList, setClientList] = useState([] as Client[])
 
   const onSubmit = handleSubmit(async (data) => {})
 
@@ -39,6 +43,20 @@ const BookingDetail = ({ showModal, setShowModal }: props) => {
     setShowModal(value)
     reset()
   }
+
+  const fetchClients = async () => {
+    try {
+      const clients = await axios.get('/api/clients')
+      setClientList(clients.data as Client[])
+      console.log(clients.data)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  useEffect(() => {
+    fetchClients()
+  }, [])
 
   const bookForm = (
     <form onSubmit={onSubmit}>
