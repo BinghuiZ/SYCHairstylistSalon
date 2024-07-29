@@ -8,6 +8,7 @@ import {
   Button,
   Dialog,
   Flex,
+  Select,
   Text,
   TextArea,
   TextField,
@@ -37,7 +38,23 @@ const BookingDetail = ({ showModal, setShowModal }: props) => {
   })
   const [clientList, setClientList] = useState([] as Client[])
 
-  const onSubmit = handleSubmit(async (data) => {})
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      const requestData = {
+        title: data.title,
+        startDateTime: new Date(data.startDateTime).toISOString(),
+        endDateTime: new Date(data.endDateTime).toISOString(),
+        amount: parseFloat(data.amount),
+        description: data.description,
+        clientId: data.clientId,
+      }
+      console.log(requestData)
+      await axios.post('/api/bookings', requestData)
+      onOpenChange(false)
+    } catch (error) {
+      console.error(error)
+    }
+  })
 
   const onOpenChange = (value: boolean) => {
     setShowModal(value)
@@ -82,7 +99,7 @@ const BookingDetail = ({ showModal, setShowModal }: props) => {
           <Controller
             name='startDateTime'
             control={control}
-            defaultValue={new Date()}
+            defaultValue={new Date().toISOString()}
             render={({ field }) => (
               <TextField.Root
                 type='datetime-local'
@@ -97,7 +114,7 @@ const BookingDetail = ({ showModal, setShowModal }: props) => {
           <Controller
             name='endDateTime'
             control={control}
-            defaultValue={new Date()}
+            defaultValue={new Date().toISOString()}
             render={({ field }) => (
               <TextField.Root
                 type='datetime-local'
@@ -114,12 +131,10 @@ const BookingDetail = ({ showModal, setShowModal }: props) => {
           <Controller
             name='amount'
             control={control}
-            defaultValue={0}
             render={({ field }) => (
               <TextField.Root
                 placeholder='Amount'
                 type='number'
-                defaultValue={0}
                 {...register('amount')}
               />
             )}
@@ -127,15 +142,28 @@ const BookingDetail = ({ showModal, setShowModal }: props) => {
           <ErrorMessage>{errors.amount?.message}</ErrorMessage>
         </Box>
         <Box>
-          <Text>Client</Text>
-          <Controller
-            name='clientId'
-            control={control}
-            render={({ field }) => (
-              <TextField.Root type='text' {...register('clientId')} />
-            )}
-          />
-          <ErrorMessage>{errors.clientId?.message}</ErrorMessage>
+          <Flex direction='column'>
+            <Text>Client</Text>
+            <Controller
+              name='clientId'
+              control={control}
+              render={({ field }) => (
+                <Select.Root onValueChange={(data) => {
+                  field.onChange(parseInt(data))
+                }}>
+                  <Select.Trigger placeholder='Select a client' />
+                  <Select.Content position="popper">
+                    {clientList.map((client) => (
+                      <Select.Item key={client.id} value={client.id.toString()}>
+                        {client.name} | {client.phone}
+                      </Select.Item>
+                    ))}
+                  </Select.Content>
+                </Select.Root>
+              )}
+            />
+            <ErrorMessage>{errors.clientId?.message}</ErrorMessage>
+          </Flex>
         </Box>
       </Flex>
       <Box>
