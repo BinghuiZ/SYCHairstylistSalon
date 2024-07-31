@@ -11,25 +11,25 @@ import { Fragment, useEffect, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { ExclamationTriangleIcon } from '@radix-ui/react-icons'
 import BookingDetail from './_components/BookingDetail'
-
-export interface Event {
-  title: string
-  start: Date | string
-  allDay: boolean
-  id: number
-}
+import { Booking } from '@prisma/client'
+import axios from 'axios'
 
 const CalendarPage = () => {
   const [allEvents, setAllEvents] = useState<Event[]>([])
+  const [allBookings, setAllBookings] = useState<Booking[]>([])
   const [showModal, setShowModal] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [idToDelete, setIdToDelete] = useState<number | null>(null)
-  const [newEvent, setNewEvent] = useState<Event>({
-    title: '',
-    start: '',
-    allDay: true,
-    id: 0,
-  })
+
+  const fetchBookings = async () => {
+    try {
+      const response = await axios.get('/api/bookings')
+      const bookings = await response.data
+      setAllBookings(bookings)
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
   useEffect(() => {
     let draggableEl = document.getElementById('draggable-el')
@@ -44,26 +44,15 @@ const CalendarPage = () => {
         },
       })
     }
+    fetchBookings()
   }, [])
 
   function handleDateClick(arg: { date: Date; dateStr: string }) {
-    setNewEvent({
-      ...newEvent,
-      start: arg.date,
-      id: new Date().getTime(),
-    })
     setShowModal(true)
   }
 
   function addEvent(data: DropArg) {
-    const event = {
-      ...newEvent,
-      start: data.date.toISOString(),
-      title: data.draggedEl.innerText,
-      allDay: data.allDay,
-      id: new Date().getTime(),
-    }
-    setAllEvents([...allEvents, event])
+    
   }
 
   function handleDeleteModal(data: { event: { id: string } }) {
@@ -185,9 +174,11 @@ const CalendarPage = () => {
                 center: 'title',
                 right: 'dayGridMonth timeGridWeek',
               }}
-              events={allEvents.map((event) => ({
-                ...event,
-                id: event.id.toString(),
+              events={allBookings.map((booking) => ({
+                id: booking.id.toString(),
+                title: booking.title,
+                start: booking.startDateTime,
+                end: booking.endDateTime,
               }))}
               nowIndicator={true}
               editable={true}
