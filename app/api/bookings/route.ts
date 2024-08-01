@@ -3,7 +3,17 @@ import { NextRequest, NextResponse } from 'next/server'
 
 // GET Method: Retrieve all bookings
 export async function GET(request: NextRequest) {
+  const params = request.nextUrl.searchParams
+  const start = params.get('start')
+  const end = params.get('end')
+  console.log('GET /api/bookings', params)
   const bookings = await prisma.booking.findMany({
+    where: {
+      startDateTime: {
+        gte: new Date(start ?? new Date().toISOString()),
+        lte: new Date(end ?? new Date().toISOString()),
+      },
+    },
     orderBy: { startDateTime: 'desc' },
   })
 

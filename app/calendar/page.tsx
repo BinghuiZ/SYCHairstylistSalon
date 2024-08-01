@@ -12,7 +12,7 @@ import { Dialog, Transition } from '@headlessui/react'
 import { ExclamationTriangleIcon } from '@radix-ui/react-icons'
 import BookingDetail from './_components/BookingDetail'
 import { Booking } from '@prisma/client'
-import axios from 'axios'
+import axios, { all } from 'axios'
 
 const CalendarPage = () => {
   const [allBookings, setAllBookings] = useState<Booking[]>([])
@@ -20,11 +20,13 @@ const CalendarPage = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [idToDelete, setIdToDelete] = useState<number | null>(null)
 
-  const fetchBookings = async () => {
+  const fetchBookings = async (start: string, end: string) => {
     try {
-      const response = await axios.get('/api/bookings')
+      const response = await axios.get('/api/bookings', {
+        params: { start, end },
+      })
       const bookings = await response.data
-      setAllBookings(bookings)
+      setAllBookings([...allBookings, ...bookings])
     } catch (error) {
       console.error(error)
     }
@@ -43,25 +45,24 @@ const CalendarPage = () => {
         },
       })
     }
-    fetchBookings()
   }, [])
+
+  function datesSetHandler(arg: { start: Date; end: Date }) {
+    fetchBookings(arg.start.toISOString(), arg.end.toISOString())
+  }
 
   function handleDateClick(arg: { date: Date; dateStr: string }) {
     setShowModal(true)
   }
 
-  function addEvent(data: DropArg) {
-    
-  }
+  function addEvent(data: DropArg) {}
 
   function handleDeleteModal(data: { event: { id: string } }) {
     setShowDeleteModal(true)
     setIdToDelete(Number(data.event.id))
   }
 
-  function handleDelete() {
-
-  }
+  function handleDelete() {}
 
   function handleCloseModal() {
     setShowModal(false)
@@ -183,6 +184,7 @@ const CalendarPage = () => {
               dateClick={handleDateClick}
               drop={(data) => addEvent(data)}
               eventClick={(data) => handleDeleteModal(data)}
+              datesSet={datesSetHandler}
             />
           </div>
         </div>
