@@ -44,7 +44,7 @@ const BookingDetail = ({ showModal, setShowModal }: props) => {
         title: data.title,
         startDateTime: new Date(data.startDateTime).toISOString(),
         endDateTime: new Date(data.endDateTime).toISOString(),
-        amount: parseFloat(data.amount),
+        amount: data.amount,
         description: data.description,
         clientId: data.clientId,
       }
