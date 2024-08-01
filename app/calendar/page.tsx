@@ -15,7 +15,6 @@ import { Booking } from '@prisma/client'
 import axios from 'axios'
 
 const CalendarPage = () => {
-  const [allEvents, setAllEvents] = useState<Event[]>([])
   const [allBookings, setAllBookings] = useState<Booking[]>([])
   const [showModal, setShowModal] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
@@ -61,11 +60,7 @@ const CalendarPage = () => {
   }
 
   function handleDelete() {
-    setAllEvents(
-      allEvents.filter((event) => Number(event.id) !== Number(idToDelete))
-    )
-    setShowDeleteModal(false)
-    setIdToDelete(null)
+
   }
 
   function handleCloseModal() {
