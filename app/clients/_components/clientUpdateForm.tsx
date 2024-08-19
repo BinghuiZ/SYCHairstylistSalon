@@ -22,7 +22,7 @@ import { z } from 'zod'
 
 type IssueFormData = z.infer<typeof clientSchema>
 
-const ClientForm = ({ client }: { client?: Client }) => {
+const ClientUpdateForm = ({ client }: { client?: Client }) => {
   const [error, setError] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -100,4 +100,4 @@ const ClientForm = ({ client }: { client?: Client }) => {
   )
 }
 
-export default ClientForm
+export default ClientUpdateForm
