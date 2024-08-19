@@ -1,7 +1,8 @@
 import { Client } from '@prisma/client'
 import { ArrowUpIcon } from '@radix-ui/react-icons'
-import { Button, Table } from '@radix-ui/themes'
+import { Table } from '@radix-ui/themes'
 import NextLink from 'next/link'
+import ClientTableActions from './_components/ClientTableActions'
 
 export interface ClientQuery {
   orderBy: keyof Client
@@ -48,12 +49,7 @@ const ClientTable = ({ searchParams, clients }: Props) => {
               {client.createdAt.toDateString()}
             </Table.Cell>
             <Table.Cell justify='center'>
-              <div className='flex justify-center space-x-2 content-center'>
-                <NextLink href={`/clients/${client.id}`}>
-                  <Button>Details</Button>
-                </NextLink>
-                <Button color='red'>Delete</Button>
-              </div>
+              <ClientTableActions clientId={client.id} />
             </Table.Cell>
           </Table.Row>
         ))}
