@@ -12,7 +12,7 @@ import { Dialog, Transition } from '@headlessui/react'
 import { ExclamationTriangleIcon } from '@radix-ui/react-icons'
 import BookingDetail from './_components/BookingDetail'
 import { Booking } from '@prisma/client'
-import axios, { all } from 'axios'
+import axios from 'axios'
 
 const CalendarPage = () => {
   const [allBookings, setAllBookings] = useState<Booking[]>([])

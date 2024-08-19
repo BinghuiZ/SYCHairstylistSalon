@@ -1,5 +1,5 @@
 import prisma from '@/prisma/client'
-import { Card, Container, Flex, Heading, Table } from '@radix-ui/themes'
+import { Card, Container, Flex, Heading } from '@radix-ui/themes'
 import { notFound } from 'next/navigation'
 import ClientUpdateForm from '../_components/ClientUpdateForm'
 
