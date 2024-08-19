@@ -18,6 +18,7 @@ import { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Client } from '@prisma/client'
+import { useRouter } from 'next/navigation'
 
 type BookingFormData = z.infer<typeof bookingSchema>
 
@@ -27,6 +28,7 @@ interface props {
 }
 
 const BookingDetail = ({ showModal, setShowModal }: props) => {
+  const router = useRouter()
   const {
     register,
     control,
@@ -42,15 +44,15 @@ const BookingDetail = ({ showModal, setShowModal }: props) => {
     try {
       const requestData = {
         title: data.title,
-        startDateTime: new Date(data.startDateTime).toISOString(),
-        endDateTime: new Date(data.endDateTime).toISOString(),
+        startDateTime: data.startDateTime.toISOString(),
+        endDateTime: data.endDateTime.toISOString(),
         amount: data.amount,
         description: data.description,
         clientId: data.clientId,
       }
-      console.log(requestData)
       await axios.post('/api/bookings', requestData)
       onOpenChange(false)
+      router.refresh()
     } catch (error) {
       console.error(error)
     }
@@ -65,7 +67,6 @@ const BookingDetail = ({ showModal, setShowModal }: props) => {
     try {
       const clients = await axios.get('/api/clients')
       setClientList(clients.data as Client[])
-      console.log(clients.data)
     } catch (error) {
       console.error(error)
     }
@@ -99,11 +100,11 @@ const BookingDetail = ({ showModal, setShowModal }: props) => {
           <Controller
             name='startDateTime'
             control={control}
-            defaultValue={new Date().toISOString()}
+            defaultValue={new Date()}
             render={({ field }) => (
               <TextField.Root
                 type='datetime-local'
-                {...register('startDateTime')}
+                {...register('startDateTime', { valueAsDate: true })}
               />
             )}
           />
@@ -114,11 +115,11 @@ const BookingDetail = ({ showModal, setShowModal }: props) => {
           <Controller
             name='endDateTime'
             control={control}
-            defaultValue={new Date().toISOString()}
+            defaultValue={new Date()}
             render={({ field }) => (
               <TextField.Root
                 type='datetime-local'
-                {...register('endDateTime')}
+                {...register('endDateTime', { valueAsDate: true })}
               />
             )}
           />
@@ -135,7 +136,7 @@ const BookingDetail = ({ showModal, setShowModal }: props) => {
               <TextField.Root
                 placeholder='Amount'
                 type='number'
-                {...register('amount')}
+                {...register('amount', { valueAsNumber: true })}
               />
             )}
           />
@@ -148,11 +149,13 @@ const BookingDetail = ({ showModal, setShowModal }: props) => {
               name='clientId'
               control={control}
               render={({ field }) => (
-                <Select.Root onValueChange={(data) => {
-                  field.onChange(parseInt(data))
-                }}>
+                <Select.Root
+                  onValueChange={(data) => {
+                    field.onChange(parseInt(data))
+                  }}
+                >
                   <Select.Trigger placeholder='Select a client' />
-                  <Select.Content position="popper">
+                  <Select.Content position='popper'>
                     {clientList.map((client) => (
                       <Select.Item key={client.id} value={client.id.toString()}>
                         {client.name} | {client.phone}
