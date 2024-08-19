@@ -1,7 +1,7 @@
 import prisma from '@/prisma/client'
 import { Card, Container, Flex, Heading, Table } from '@radix-ui/themes'
 import { notFound } from 'next/navigation'
-import ClientUpdateForm from '../_components/clientUpdateForm'
+import ClientUpdateForm from '../_components/ClientUpdateForm'
 
 interface Props {
   params: { id: string }
