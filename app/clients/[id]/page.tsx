@@ -10,6 +10,11 @@ interface Props {
 const fetchClient = async (id: number) => {
   return prisma.client.findUnique({
     where: { id },
+    include: {
+      bookings: {
+        orderBy: { createdAt: 'desc' },
+      },
+    },
   })
 }
 
@@ -25,6 +30,13 @@ const ClientDetailPage = async ({ params }: Props) => {
         <Container asChild={true}>
           <Card>
             <Heading>Booking History</Heading>
+            <ul>
+              {client.bookings.map((booking) => (
+                <li key={booking.id}>
+                  {booking.id} - {booking.createdAt.toISOString()}
+                </li>
+              ))}
+            </ul>
           </Card>
         </Container>
       </Flex>
