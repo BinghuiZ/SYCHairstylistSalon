@@ -1,4 +1,7 @@
 import prisma from '@/prisma/client'
+import { Box, Card, Container, Text } from '@radix-ui/themes'
+import { notFound } from 'next/navigation'
+import BookingUpdateForm from './BookingUpdateForm'
 
 interface ClientBookingPageProps {
   params: {
@@ -22,11 +25,19 @@ const ClientBookingPage = async ({ params }: ClientBookingPageProps) => {
     parseInt(params.bookingId)
   )
 
+  if (!booking) notFound()
+
   return (
-    <div>
-      <h1>Client Booking</h1>
-      <pre>{JSON.stringify(booking, null, 2)}</pre>
-    </div>
+    <Container>
+      <Card asChild>
+        <Box>
+          <Text as='span' size='8'>
+            Booking Details
+          </Text>
+          <BookingUpdateForm booking={booking} />
+        </Box>
+      </Card>
+    </Container>
   )
 }
 
