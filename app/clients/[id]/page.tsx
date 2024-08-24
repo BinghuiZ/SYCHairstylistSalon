@@ -37,7 +37,6 @@ const ClientDetailPage = async ({ params }: Props) => {
                 <Table.Row>
                   <Table.ColumnHeaderCell>Title</Table.ColumnHeaderCell>
                   <Table.ColumnHeaderCell>Amount</Table.ColumnHeaderCell>
-                  <Table.ColumnHeaderCell>Description</Table.ColumnHeaderCell>
                   <Table.ColumnHeaderCell>Date</Table.ColumnHeaderCell>
                   <Table.ColumnHeaderCell>Details</Table.ColumnHeaderCell>
                 </Table.Row>
@@ -46,7 +45,6 @@ const ClientDetailPage = async ({ params }: Props) => {
                 {client.bookings.map((booking) => (
                   <Table.Row key={booking.id}>
                     <Table.Cell>{booking.title}</Table.Cell>
-                    <Table.Cell>{booking.amount}</Table.Cell>
                     <Table.Cell>{booking.description}</Table.Cell>
                     <Table.Cell>
                       {new Date(booking.startDateTime).toLocaleDateString(
