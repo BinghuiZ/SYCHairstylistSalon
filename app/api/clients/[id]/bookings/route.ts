@@ -12,7 +12,7 @@ export async function GET(
     where: { id: Number(params.id) },
     include: {
       bookings: {
-        orderBy: { date: 'desc' },
+        orderBy: { startDateTime: 'desc' },
       },
     },
   })
