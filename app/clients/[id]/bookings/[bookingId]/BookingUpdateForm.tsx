@@ -7,6 +7,7 @@ import {
   AlertDialog,
   Box,
   Button,
+  Callout,
   Flex,
   Text,
   TextArea,
@@ -17,6 +18,8 @@ import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Booking } from '@prisma/client'
 import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { InfoCircledIcon } from '@radix-ui/react-icons'
 
 type BookingFormData = z.infer<typeof bookingSchema>
 
@@ -26,6 +29,8 @@ interface Props {
 
 const BookingUpdateForm = ({ booking }: Props) => {
   const router = useRouter()
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [error, setError] = useState('')
   const {
     register,
     control,
@@ -45,6 +50,8 @@ const BookingUpdateForm = ({ booking }: Props) => {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
+      setIsSubmitting(true)
+
       const requestData = {
         title: data.title,
         startDateTime: data.startDateTime.toISOString(),
@@ -52,9 +59,12 @@ const BookingUpdateForm = ({ booking }: Props) => {
         amount: data.amount,
         description: data.description,
       }
-      const res = await axios.put(`/api/bookings/${booking.id}`, requestData)
+      await axios.put(`/api/bookings123/${booking.id}`, requestData)
     } catch (error) {
       console.error(error)
+      setError('An error occurred. Please try again.')
+    } finally {
+      setIsSubmitting(false)
     }
   })
 
@@ -64,10 +74,11 @@ const BookingUpdateForm = ({ booking }: Props) => {
 
   const handleDelete = async () => {
     try {
-      const res = await axios.delete(`/api/bookings/${booking.id}`)
-        router.push(`/clients/${booking.clientId}`)
+      await axios.delete(`/api/bookings/${booking.id}`)
+      router.push(`/clients/${booking.clientId}`)
     } catch (error) {
       console.error(error)
+      setError('An error occurred. Please try again.')
     }
   }
 
@@ -99,99 +110,111 @@ const BookingUpdateForm = ({ booking }: Props) => {
   )
 
   return (
-    <form onSubmit={onSubmit}>
-      <Box>
-        <Text>Title</Text>
-        <Controller
-          name='title'
-          control={control}
-          defaultValue={booking.title}
-          render={({ field }) => (
-            <TextField.Root
-              placeholder='Title'
-              defaultValue={booking.title}
-              {...register('title')}
+    <>
+      {error && (
+        <Callout.Root color='red' className='mt-4 mb-2'>
+          <Callout.Icon>
+            <InfoCircledIcon />
+          </Callout.Icon>
+          <Callout.Text>{error}</Callout.Text>
+        </Callout.Root>
+      )}
+      <form onSubmit={onSubmit}>
+        <Box>
+          <Text>Title</Text>
+          <Controller
+            name='title'
+            control={control}
+            defaultValue={booking.title}
+            render={({ field }) => (
+              <TextField.Root
+                placeholder='Title'
+                defaultValue={booking.title}
+                {...register('title')}
+              />
+            )}
+          />
+          <ErrorMessage>{errors.title?.message}</ErrorMessage>
+        </Box>
+        <Flex gap='2'>
+          <Box>
+            <Text>Start Date Time</Text>
+            <Controller
+              name='startDateTime'
+              control={control}
+              defaultValue={booking.startDateTime}
+              render={({ field }) => (
+                <TextField.Root
+                  type='datetime-local'
+                  value={formatDateForDateTimeLocal(booking.startDateTime)}
+                  onChange={(e) => field.onChange(new Date(e.target.value))}
+                  // {...register('startDateTime', { valueAsDate: true })}
+                />
+              )}
             />
-          )}
-        />
-        <ErrorMessage>{errors.title?.message}</ErrorMessage>
-      </Box>
-      <Flex gap='2'>
-        <Box>
-          <Text>Start Date Time</Text>
-          <Controller
-            name='startDateTime'
-            control={control}
-            defaultValue={booking.startDateTime}
-            render={({ field }) => (
-              <TextField.Root
-                type='datetime-local'
-                value={formatDateForDateTimeLocal(booking.startDateTime)}
-                onChange={(e) => field.onChange(new Date(e.target.value))}
-                // {...register('startDateTime', { valueAsDate: true })}
-              />
-            )}
-          />
-          <ErrorMessage>{errors.startDateTime?.message}</ErrorMessage>
-        </Box>
-        <Box>
-          <Text>End Date Time</Text>
-          <Controller
-            name='endDateTime'
-            control={control}
-            defaultValue={booking.endDateTime}
-            render={({ field }) => (
-              <TextField.Root
-                type='datetime-local'
-                value={formatDateForDateTimeLocal(booking.endDateTime)}
-                onChange={(e) => field.onChange(new Date(e.target.value))}
-                // {...register('endDateTime', { valueAsDate: true })}
-              />
-            )}
-          />
-          <ErrorMessage>{errors.endDateTime?.message}</ErrorMessage>
-        </Box>
-      </Flex>
-      <Flex gap='2'>
-        <Box>
-          <Text>Amount</Text>
-          <Controller
-            name='amount'
-            control={control}
-            defaultValue={booking.amount}
-            render={({ field }) => (
-              <TextField.Root
-                placeholder='Amount'
-                type='number'
-                defaultValue={booking.amount}
-                {...register('amount', { valueAsNumber: true })}
-              />
-            )}
-          />
-          <ErrorMessage>{errors.amount?.message}</ErrorMessage>
-        </Box>
-      </Flex>
-      <Box>
-        <Text>Description</Text>
-        <Controller
-          name='description'
-          control={control}
-          defaultValue={booking.description}
-          render={({ field }) => (
-            <TextArea
-              placeholder='Description...'
-              defaultValue={booking.description ?? ''}
-              {...register('description')}
+            <ErrorMessage>{errors.startDateTime?.message}</ErrorMessage>
+          </Box>
+          <Box>
+            <Text>End Date Time</Text>
+            <Controller
+              name='endDateTime'
+              control={control}
+              defaultValue={booking.endDateTime}
+              render={({ field }) => (
+                <TextField.Root
+                  type='datetime-local'
+                  value={formatDateForDateTimeLocal(booking.endDateTime)}
+                  onChange={(e) => field.onChange(new Date(e.target.value))}
+                  // {...register('endDateTime', { valueAsDate: true })}
+                />
+              )}
             />
-          )}
-        />
-        <ErrorMessage>{errors.description?.message}</ErrorMessage>
-      </Box>
-      <Flex gap='3' mt='4' justify='start'>
-        <Button type='submit'>Update</Button>
-        {deleteDialog}
-      </Flex>
-    </form>
+            <ErrorMessage>{errors.endDateTime?.message}</ErrorMessage>
+          </Box>
+        </Flex>
+        <Flex gap='2'>
+          <Box>
+            <Text>Amount</Text>
+            <Controller
+              name='amount'
+              control={control}
+              defaultValue={booking.amount}
+              render={({ field }) => (
+                <TextField.Root
+                  placeholder='Amount'
+                  type='number'
+                  defaultValue={booking.amount}
+                  {...register('amount', { valueAsNumber: true })}
+                />
+              )}
+            />
+            <ErrorMessage>{errors.amount?.message}</ErrorMessage>
+          </Box>
+        </Flex>
+        <Box>
+          <Text>Description</Text>
+          <Controller
+            name='description'
+            control={control}
+            defaultValue={booking.description}
+            render={({ field }) => (
+              <TextArea
+                placeholder='Description...'
+                defaultValue={booking.description ?? ''}
+                {...register('description')}
+              />
+            )}
+          />
+          <ErrorMessage>{errors.description?.message}</ErrorMessage>
+        </Box>
+        <Flex gap='3' mt='4' justify='start'>
+          <Button type='submit' disabled={isSubmitting}>
+            {isSubmitting ? 'Updating...' : 'Update'}
+          </Button>
+          {deleteDialog}
+        </Flex>
+      </form>
+    </>
   )
 }
 
