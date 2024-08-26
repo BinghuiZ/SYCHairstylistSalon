@@ -13,12 +13,14 @@ import { ExclamationTriangleIcon } from '@radix-ui/react-icons'
 import BookingDetail from './_components/BookingDetail'
 import { Booking } from '@prisma/client'
 import axios from 'axios'
+import { useRouter } from 'next/navigation'
 
 const CalendarPage = () => {
   const [allBookings, setAllBookings] = useState<Booking[]>([])
   const [showModal, setShowModal] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [idToDelete, setIdToDelete] = useState<number | null>(null)
+  const router = useRouter();
 
   const fetchBookings = async (start: string, end: string) => {
     try {
@@ -57,9 +59,8 @@ const CalendarPage = () => {
 
   function addEvent(data: DropArg) {}
 
-  function handleDeleteModal(data: { event: { id: string } }) {
-    setShowDeleteModal(true)
-    setIdToDelete(Number(data.event.id))
+  function handleDeleteModal(data: { event: { id: string, clientId: string } }) {
+    router.push(`/clients/${data.event.clientId}/bookings/${data.event.id}`);
   }
 
   function handleDelete() {}
@@ -175,6 +176,7 @@ const CalendarPage = () => {
                 title: booking.title,
                 start: booking.startDateTime,
                 end: booking.endDateTime,
+                clientId: booking.clientId,
               }))}
               nowIndicator={true}
               editable={true}
