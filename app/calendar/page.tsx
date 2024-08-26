@@ -19,8 +19,7 @@ const CalendarPage = () => {
   const [allBookings, setAllBookings] = useState<Booking[]>([])
   const [showModal, setShowModal] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
-  const [idToDelete, setIdToDelete] = useState<number | null>(null)
-  const router = useRouter();
+  const router = useRouter()
 
   const fetchBookings = async (start: string, end: string) => {
     try {
@@ -57,10 +56,12 @@ const CalendarPage = () => {
     setShowModal(true)
   }
 
-  function addEvent(data: DropArg) {}
-
-  function handleDeleteModal(data: { event: { id: string, clientId: string } }) {
-    router.push(`/clients/${data.event.clientId}/bookings/${data.event.id}`);
+  function handleDeleteModal(data: {
+    event: { id: string; extendedProps: { clientId: string } }
+  }) {
+    router.push(
+      `/clients/${data.event.extendedProps.clientId}/bookings/${data.event.id}`
+    )
   }
 
   function handleDelete() {}
@@ -68,7 +69,6 @@ const CalendarPage = () => {
   function handleCloseModal() {
     setShowModal(false)
     setShowDeleteModal(false)
-    setIdToDelete(null)
   }
 
   const deleteModal = () => {
@@ -184,7 +184,7 @@ const CalendarPage = () => {
               selectable={true}
               selectMirror={true}
               dateClick={handleDateClick}
-              drop={(data) => addEvent(data)}
+              // drop={(data) => addEvent(data)}
               eventClick={(data) => handleDeleteModal(data)}
               datesSet={datesSetHandler}
             />
@@ -192,7 +192,6 @@ const CalendarPage = () => {
         </div>
 
         {addModal}
-        {deleteModal()}
       </main>
     </>
   )

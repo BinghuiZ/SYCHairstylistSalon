@@ -56,7 +56,7 @@ export async function DELETE(
     await prisma.booking.delete({
       where: { id: Number(params.id) },
     })
-    return new Response('Booking deleted successfully', { status: 204 })
+    return new Response('Booking deleted successfully', { status: 200 })
   } catch (error) {
     console.error('Error deleting booking:', error)
     return new Response('Error deleting booking', { status: 500 })

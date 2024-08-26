@@ -3,12 +3,20 @@
 import ErrorMessage from '@/app/components/ErrorMessage'
 import { bookingSchema } from '@/app/validationSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Box, Button, Flex, Text, TextArea, TextField } from '@radix-ui/themes'
+import {
+  AlertDialog,
+  Box,
+  Button,
+  Flex,
+  Text,
+  TextArea,
+  TextField,
+} from '@radix-ui/themes'
 import axios from 'axios'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Booking } from '@prisma/client'
-import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 type BookingFormData = z.infer<typeof bookingSchema>
 
@@ -17,7 +25,7 @@ interface Props {
 }
 
 const BookingUpdateForm = ({ booking }: Props) => {
-
+  const router = useRouter()
   const {
     register,
     control,
@@ -32,7 +40,7 @@ const BookingUpdateForm = ({ booking }: Props) => {
       amount: booking.amount,
       description: booking.description,
       clientId: booking.clientId,
-    }
+    },
   })
 
   const onSubmit = handleSubmit(async (data) => {
@@ -53,6 +61,42 @@ const BookingUpdateForm = ({ booking }: Props) => {
   function formatDateForDateTimeLocal(date: Date): string {
     return date.toISOString().slice(0, 16)
   }
+
+  const handleDelete = async () => {
+    try {
+      const res = await axios.delete(`/api/bookings/${booking.id}`)
+        router.push(`/clients/${booking.clientId}`)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const deleteDialog = (
+    <AlertDialog.Root>
+      <AlertDialog.Trigger>
+        <Button color='red'>Remove Booking</Button>
+      </AlertDialog.Trigger>
+      <AlertDialog.Content maxWidth='450px'>
+        <AlertDialog.Title>Remove Booking</AlertDialog.Title>
+        <AlertDialog.Description size='2'>
+          Are you sure you want to remove this booking?
+        </AlertDialog.Description>
+
+        <Flex gap='3' mt='4' justify='end'>
+          <AlertDialog.Cancel>
+            <Button variant='soft' color='gray'>
+              Cancel
+            </Button>
+          </AlertDialog.Cancel>
+          <AlertDialog.Action>
+            <Button variant='solid' color='red' onClick={() => handleDelete()}>
+              Remove
+            </Button>
+          </AlertDialog.Action>
+        </Flex>
+      </AlertDialog.Content>
+    </AlertDialog.Root>
+  )
 
   return (
     <form onSubmit={onSubmit}>
@@ -145,6 +189,7 @@ const BookingUpdateForm = ({ booking }: Props) => {
       </Box>
       <Flex gap='3' mt='4' justify='start'>
         <Button type='submit'>Update</Button>
+        {deleteDialog}
       </Flex>
     </form>
   )
