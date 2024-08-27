@@ -1,5 +1,7 @@
 import prisma from '@/prisma/client'
 import { Booking } from '@prisma/client'
+import { Container, Flex } from '@radix-ui/themes'
+import IncomeBarChart from './components/IncomeBarChart'
 
 export default async function Home() {
   const getTodayBookings = async () => {
@@ -56,20 +58,16 @@ export default async function Home() {
   ).map((booking) => booking.amount)
 
   return (
-    <>
-      <main>
+    <Container>
+      <Flex direction='column' gap='4'>
         {todayBookings.map((booking) => (
           <div key={booking.id}>{booking.title}</div>
         ))}
-        <div>
-          <h2>Current Week Income</h2>
-          <p>{currentWeekIncome.reduce((acc, curr) => acc + curr, 0)}</p>
-        </div>
-        <div>
-          <h2>Current Month Income</h2>
-          <p>{currentMonthIncome.reduce((acc, curr) => acc + curr, 0)}</p>
-        </div>
-      </main>
-    </>
+        <IncomeBarChart
+          currentWeekIncome={currentWeekIncome}
+          currentMonthIncome={currentMonthIncome}
+        />
+      </Flex>
+    </Container>
   )
 }
