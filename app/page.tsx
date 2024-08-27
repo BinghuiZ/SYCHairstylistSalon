@@ -5,11 +5,17 @@ import IncomeBarChart from './components/IncomeBarChart'
 
 export default async function Home() {
   const getTodayBookings = async () => {
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    
+    const tomorrow = new Date(today)
+    tomorrow.setDate(tomorrow.getDate() + 1)
+
     const response: Booking[] = await prisma.booking.findMany({
       where: {
         startDateTime: {
-          gte: new Date(),
-          lt: new Date(new Date().setDate(new Date().getDate() + 1)),
+          gte: today,
+          lt: tomorrow,
         },
       },
     })
