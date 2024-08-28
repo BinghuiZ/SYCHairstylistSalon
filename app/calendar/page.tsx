@@ -91,7 +91,7 @@ const CalendarPage = () => {
               selectMirror={true}
               dateClick={handleDateClick}
               // drop={(data) => addEvent(data)}
-              eventClick={(data) => handleDeleteModal(data)}
+              eventClick={(data) => handleDeleteModal(data as any)}
               datesSet={datesSetHandler}
             />
           </div>
