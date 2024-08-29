@@ -13,8 +13,8 @@ RUN yarn install --frozen-lockfile
 # Copy the rest of the application code
 COPY . .
 
-# Copy .env.production file
-COPY .env.prod .env
+# Copy .env file
+COPY .env .env
 
 # Generate Prisma client
 RUN npx prisma generate
