@@ -4,6 +4,8 @@ import { Box, Container, Flex } from '@radix-ui/themes'
 import IncomeBarChart from './components/IncomeBarChart'
 import TodayBookingCalendar from './components/TodayBookingCalendar'
 
+export const dynamic = 'force-dynamic'
+
 export default async function Home() {
   const getTodayBookings = async () => {
     const today = new Date()

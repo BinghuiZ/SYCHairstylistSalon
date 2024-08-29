@@ -9,6 +9,8 @@ interface Props {
   params: { id: string }
 }
 
+export const dynamic = 'force-dynamic'
+
 const fetchClient = async (id: number) => {
   return prisma.client.findUnique({
     where: { id },

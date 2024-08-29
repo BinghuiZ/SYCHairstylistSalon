@@ -10,6 +10,8 @@ interface ClientBookingPageProps {
   }
 }
 
+export const dynamic = 'force-dynamic'
+
 const fetchClientBooking = async (id: number, bookingId: number) => {
   return prisma.booking.findUnique({
     where: { id: bookingId },
